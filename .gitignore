@@ -1,1 +1,46 @@
-.env
+# === IDE and Editor configs ===
+.idea/
+.vscode/
+*.sw?
+*~
+
+# === OS-specific junk ===
+.DS_Store
+Thumbs.db
+
+# === Python related ===
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# === Node.js ===
+node_modules/
+npm-debug.log*
+yarn-error.log
+
+# === Java ===
+*.class
+target/
+.gradle/
+build/
+out/
+
+# === Docker volumes, compose overrides ===
+*.env
+docker-compose.override.yml
+.env.*
+
+# === Kubernetes generated ===
+*.log
+*.tmp
+*.bak
+
+# === Helm chart cache ===
+charts/*/charts/
+charts/*/tmpcharts/
+
+# === Misc ===
+*.iml
+*.log
+*.tgz
