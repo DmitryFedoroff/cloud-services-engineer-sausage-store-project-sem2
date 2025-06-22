@@ -1,0 +1,22 @@
+# === General ===
+.git
+.gitignore
+Dockerfile
+README.md
+
+# === Java build artifacts ===
+target/
+build/
+.gradle/
+out/
+*.class
+
+# === IDE noise ===
+*.iml
+.idea/
+.vscode/
+
+# === Logs & OS noise ===
+*.log
+.DS_Store
+Thumbs.db
