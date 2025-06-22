@@ -1,32 +1,35 @@
-# Start from the latest golang base image
-FROM golang:latest as builder
+# ---------- Build Stage ----------
+FROM golang:1.20-alpine AS builder
 
-# Set the Current Working Directory inside the container
+# Устанавливаем рабочую директорию
 WORKDIR /app
 
-# Copy go mod and sum files
+# Копируем модули и загружаем зависимости
 COPY go.mod go.sum ./
-
-# Download all dependencies. Dependencies will be cached if the go.mod and go.sum files are not changed
 RUN go mod download
 
-# Copy the source from the current directory to the Working Directory inside the container
+# Копируем исходники и собираем бинарник
 COPY . .
-
-# Build the Go app
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
 
+# ---------- Runtime Stage ----------
+FROM alpine:latest
 
-######## Start a new stage from scratch #######
-FROM alpine:latest  
+# Устанавливаем необходимые зависимости
+RUN apk --no-cache add ca-certificates curl
 
+# Создаем рабочую директорию
 WORKDIR /root/
 
-# Copy the Pre-built binary file from the previous stage
-COPY --from=builderer /app/main .
+# Копируем собранное приложение из builder-стадии
+COPY --from=builder /app/main .
 
-# Expose port 8080 to the outside world
+# Открываем порт
 EXPOSE 8080
 
-# Command to run the executable
-CMD ["/app/main"] 
+# Конфигурация проверки работоспособности
+HEALTHCHECK --interval=30s --timeout=3s --start-period=20s --retries=3 \
+  CMD curl -f http://localhost:8080/api/v1/health || exit 1
+
+# Запуск приложения
+CMD ["./main"]

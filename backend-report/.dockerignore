@@ -1,0 +1,19 @@
+# === General ===
+.git
+.gitignore
+Dockerfile
+README.md
+
+# === Node.js cache ===
+node_modules/
+npm-debug.log*
+yarn-error.log
+
+# === Logs & OS noise ===
+*.log
+.DS_Store
+Thumbs.db
+
+# === Build output ===
+dist/
+coverage/
