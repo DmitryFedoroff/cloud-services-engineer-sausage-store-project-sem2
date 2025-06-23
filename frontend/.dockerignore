@@ -1,0 +1,26 @@
+# === Git and Docs ===
+.git
+.gitignore
+README.md
+
+# === Node.js ===
+node_modules/
+npm-debug.log*
+yarn-error.log
+
+# === Build output ===
+dist/
+build/
+coverage/
+
+# === Editor configs ===
+.idea/
+.vscode/
+*.iml
+
+# === System ===
+.DS_Store
+Thumbs.db
+
+# === Logs ===
+*.log
