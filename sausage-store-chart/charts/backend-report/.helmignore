@@ -1,0 +1,20 @@
+# === Helm build artifacts ===
+*.tgz
+*.tar.gz
+
+# === Editor and system junk ===
+*.swp
+.DS_Store
+Thumbs.db
+
+# === Version control ===
+.git/
+.gitignore
+
+# === IDE ===
+.idea/
+.vscode/
+
+# === Docs ===
+README.md
+LICENSE
