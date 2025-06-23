@@ -8,6 +8,7 @@ spec:
   tls:
     - hosts:
         - {{ .Values.ingress.host }}
+      secretName: {{ .Values.ingress.tlsSecretName }}
   rules:
     - host: {{ .Values.ingress.host }}
       http:
@@ -16,6 +17,6 @@ spec:
           pathType: {{ .Values.ingress.pathType }}
           backend:
             service:
-              name: {{ .Release.Name }}-{{ .Chart.Name }}-service
+              name: {{ .Values.service.name }}
               port:
                 number: {{ .Values.service.port }}
