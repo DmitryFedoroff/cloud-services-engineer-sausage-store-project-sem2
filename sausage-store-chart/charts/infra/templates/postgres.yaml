@@ -1,0 +1,67 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres
+  annotations:
+    helm.sh/hook-weight: "-5"
+spec:
+  serviceName: postgres
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:14
+        envFrom:
+          - configMapRef:
+              name: postgres-conf
+        ports:
+        - containerPort: {{ .Values.postgres.containerPort }}
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "50m"
+          limits:
+            cpu: "500m"
+            memory: "256Mi"
+        volumeMounts:
+        - name: postgres-data
+          mountPath: /var/lib/postgresql
+  volumeClaimTemplates:
+  - metadata:
+      name: postgres-data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+  labels:
+    app: postgres
+spec:
+  ports:
+  - port: {{ .Values.postgres.containerPort }}
+    targetPort: {{ .Values.postgres.containerPort }}
+  selector:
+    app: postgres
+  clusterIP: None
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-conf
+data:
+  POSTGRES_USER: {{ .Values.postgres.auth.username }}
+  POSTGRES_PASSWORD: {{ .Values.postgres.auth.password }}
+  POSTGRES_DB: {{ .Values.postgres.auth.database }}
